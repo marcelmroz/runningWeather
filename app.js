@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 require('dotenv').config();
 
-console.log(process.env);
+// console.log(process.env);
 
 const app = express();
 
@@ -22,7 +22,7 @@ app.post("/submit", function(req, res) {
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&APPID=${apiKey}&units=${units}`;
 
     https.get(url, function(response) {
-        console.log(response.statusCode);
+        // console.log(response.statusCode);
         response.on("data", function(data) {
             const weatherData = JSON.parse(data);
             const tempDescription = weatherData.weather[0].description;
