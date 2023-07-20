@@ -2,6 +2,7 @@ const express = require("express");
 const https = require("https");
 const bodyParser = require("body-parser");
 const path = require("path");
+//used to secure API key
 require('dotenv').config();
 
 // console.log(process.env);
