@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-md">
                 <div class="d-flex justify-content-center">
-                    <h1>Temperature in <%= query_ %> is <%= temp_ %> &deg;C.</h1>
+                    <h1>Temperature in <%= query_ %> is <%= temperature_ %> &deg;C.</h1>
                 </div>
             </div>
         </div>
@@ -30,6 +30,13 @@
                     <h2>
                         <img src="<%= iconHttp_ %>" alt="Weather Icon">
                     </h2>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-between align-items-center">
+            <div class="col-md d-flex justify-content-center">
+                <div>
+                    <h2> Feels like <%= feelsLike_ %> &deg;C, and humidity <%= humidity_ %>%.</h2>
                 </div>
             </div>
         </div>

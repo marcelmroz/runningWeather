@@ -2,6 +2,7 @@ const express = require("express");
 const https = require("https");
 const bodyParser = require("body-parser");
 const path = require("path");
+const { error } = require("console");
 
 //Used to secure API key
 require('dotenv').config();
@@ -17,8 +18,11 @@ app.get("/", function(req, res) {
 
 
 app.post("/submit", function(req, res) {
+    //Capitalize even if the city name contain more than one word
     const query = req.body.cityName;
-
+    const words = query.split(/\s+|(?<=-)|(?=-)/); // Split on spaces and retain hyphens with positive lookbehind and lookahead
+    const capitalizedQuery = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    
     // Check if cityName is provided
     if (!query || query.trim() === "") {
         return res.status(400).send("Please provide a valid city name.");
@@ -38,6 +42,7 @@ app.post("/submit", function(req, res) {
         // Register an event listener for the "data" event to accumulate the received data
         response.on("data", function(chunk) {
             data += chunk;
+            // console.log(data);
         });
     
         // Register an event listener for the "end" event, which is triggered when all data is received
@@ -47,15 +52,19 @@ app.post("/submit", function(req, res) {
                 const weatherData = JSON.parse(data);
     
                 const tempDescription = weatherData.weather[0].description;
-                const temp = weatherData.main.temp;
+                const temperature = Math.floor(weatherData.main.temp);
                 const icon = weatherData.weather[0].icon;
                 const iconHttp = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+                const feelsLike = Math.floor(weatherData.main.feels_like);
+                const humidity = weatherData.main.humidity;
     
                 res.render('result.ejs', {
                     iconHttp_: iconHttp,
                     tempDescription_: tempDescription,
-                    temp_: temp,
-                    query_: query
+                    temperature_: temperature,
+                    query_: capitalizedQuery,
+                    feelsLike_: feelsLike,
+                    humidity_: humidity
                 });
             } catch (error) {
                 // Error while parsing the data or accessing properties
