@@ -16,7 +16,6 @@ app.get("/", function(req, res) {
     res.sendFile(path.join(__dirname, "/index.html"));
 });
 
-
 app.post("/submit", function(req, res) {
     //Capitalize even if the city name contain more than one word
     const query = req.body.cityName;
