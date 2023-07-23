@@ -9,6 +9,34 @@ require('dotenv').config();
 
 const app = express();
 
+
+function getBodyClass(tempDescription) {
+    switch (tempDescription) {
+        case 'clear sky':
+            return 'lightblue';
+        case 'few clouds':
+            return 'powderblue';
+        case 'scattered clouds':
+            return 'lightslategray';
+        case 'overcast clouds':
+            return 'lightslategray';
+        case 'broken clouds':
+            return 'silver';
+        case 'shower rain':
+            return 'lightslategrey';
+        case 'rain':
+            return 'slategrey';
+        case 'thunderstorm':
+            return 'gray';
+        case 'snow':
+            return 'ghostwhite';
+        case 'mist':
+            return 'gainsboro';
+      default:
+        return 'white';
+    }
+}
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('views', path.join(__dirname, 'views'));
 
@@ -56,14 +84,16 @@ app.post("/submit", function(req, res) {
                 const iconHttp = `http://openweathermap.org/img/wn/${icon}@2x.png`;
                 const feelsLike = Math.floor(weatherData.main.feels_like);
                 const humidity = weatherData.main.humidity;
-    
+
+                var bg_color = getBodyClass(tempDescription);    
                 res.render('result.ejs', {
                     iconHttp_: iconHttp,
                     tempDescription_: tempDescription,
                     temperature_: temperature,
                     query_: capitalizedQuery,
                     feelsLike_: feelsLike,
-                    humidity_: humidity
+                    humidity_: humidity,
+                    bg_color_: bg_color
                 });
             } catch (error) {
                 // Error while parsing the data or accessing properties

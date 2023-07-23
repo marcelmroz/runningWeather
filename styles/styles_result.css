@@ -1,20 +1,6 @@
-body {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f8f9fa;
-}
-.weather-container {
-    text-align: center;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-}
-.align-items-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+body.lightblue-bg { background-color: lightblue; }
+body.lightgrey-bg { background-color: lightgrey; }
+body.lightcyan-bg { background-color: lightcyan; }
+body.lemonchiffon-bg { background-color: lemonchiffon; }
+body.whitesmoke-bg { background-color: whitesmoke; }
+body.default-bg { background-color: white; }
