@@ -9,7 +9,6 @@ require('dotenv').config();
 
 const app = express();
 
-
 function getBodyClass(tempDescription) {
     switch (tempDescription) {
         case 'clear sky':
@@ -106,7 +105,6 @@ app.post("/submit", function(req, res) {
     });
     
 });
-
 
 app.listen(3000, function(){
     console.log("dziala na porcie 3000");
