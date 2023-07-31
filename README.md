@@ -1,2 +1,2 @@
 # runningWeather
-Based on openweathermap API - Work in Progress
+WebApp based on openweathermap API - Work in Progress
