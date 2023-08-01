@@ -56,7 +56,10 @@ app.post("/submit", function(req, res) {
 
     const apiKey = process.env.API_KEY;
     const units = "metric";
+    const lat = '';
+    const lon = '';
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&APPID=${apiKey}&units=${units}`;
+    const url2 = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
     
     // Check if the response code is not 200
     https.get(url, function(response) {
