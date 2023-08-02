@@ -47,19 +47,28 @@ app.post("/submit", function(req, res) {
     //Capitalize even if the city name contain more than one word
     const query = req.body.cityName;
     const words = query.split(/\s+|(?<=-)|(?=-)/); // Split on spaces and retain hyphens with positive lookbehind and lookahead
-    const capitalizedQuery = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    
-    // Check if cityName is provided
-    if (!query || query.trim() === "") {
-        return res.status(400).send("Please provide a valid city name.");
-    }
-
+    var capitalizedQuery = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     const apiKey = process.env.API_KEY;
     const units = "metric";
-    const lat = '';
-    const lon = '';
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&APPID=${apiKey}&units=${units}`;
-    const url2 = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+    const lat = req.body.latitude;
+    const lon = req.body.longitude;
+    var url = "";
+
+    // var url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&APPID=${apiKey}&units=${units}`;
+    // var url2 = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+
+
+
+    // Check if cityName is provided
+    if (!query || query.trim() === "") {
+        if(!lat||!lon) {
+            return res.status(400).send("Please provide a valid city name or allow location access.");
+        }
+        var url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${units}`;
+        capitalizedQuery = "your location";
+    }  else {
+        var url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&APPID=${apiKey}&units=${units}`;
+    }
     
     // Check if the response code is not 200
     https.get(url, function(response) {
