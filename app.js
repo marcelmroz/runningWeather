@@ -54,20 +54,15 @@ app.post("/submit", function(req, res) {
     const lon = req.body.longitude;
     var url = "";
 
-    // var url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&APPID=${apiKey}&units=${units}`;
-    // var url2 = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
-
-
-
     // Check if cityName is provided
     if (!query || query.trim() === "") {
         if(!lat||!lon) {
             return res.status(400).send("Please provide a valid city name or allow location access.");
         }
-        var url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${units}`;
+        url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${units}`;
         capitalizedQuery = "your location";
     }  else {
-        var url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&APPID=${apiKey}&units=${units}`;
+        url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&APPID=${apiKey}&units=${units}`;
     }
     
     // Check if the response code is not 200
