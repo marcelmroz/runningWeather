@@ -44,7 +44,7 @@ app.get("/", function(req, res) {
 });
 
 app.get("/forecast", function(req, res) {
-    res.sendFile(path.join(__dirname, "/html/forecast.html"));
+    res.sendFile(path.join(__dirname, "./html/forecast.html"));
 });
 
 app.post("/login", function(req, res) {
