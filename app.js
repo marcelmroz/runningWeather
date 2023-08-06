@@ -132,6 +132,12 @@ app.post("/forecast", function(req, res) {
     const lat = req.body.latitude;
     const lon = req.body.longitude;
     var url = "";
+    const timeOfRun = req.body.timeOfRun;
+    const testButton = req.body.selectedDate;
+    console.log(query);
+    console.log(lat + " " + lon);
+    console.log(timeOfRun);
+    console.log(testButton);
 
     // Check if cityName is provided
     if (!query || query.trim() === "") {
