@@ -61,14 +61,4 @@ $(() => {
         $("#dateDropdownBtn").text(text);
     }
 
-
-
-    // const weatherForm = document.getElementById('weatherForm');
-    // const dateDropdown = document.getElementById('dateDropdownBtn');
-    // // const selectedDateInput = document.getElementById('selectedDateInput');
-
-    // weatherForm.addEventListener('submit', function (event) {
-    //     const selectedDate = dateDropdown.textContent.trim();
-    //     selectedDateInput.value = selectedDate;
-    // });
 });
