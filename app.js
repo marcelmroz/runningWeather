@@ -133,21 +133,21 @@ app.post("/forecast", function(req, res) {
     const lon = req.body.longitude;
     var url = "";
     const timeOfRun = req.body.timeOfRun;
-    const testButton = req.body.selectedDate;
-    console.log(query);
-    console.log(lat + " " + lon);
-    console.log(timeOfRun);
-    console.log(testButton);
+    const selectedDate = req.body.selectedDate;
+    // console.log(query);
+    // console.log(lat + " " + lon);
+    // console.log(timeOfRun);
+    // console.log(selectedDate);
 
     // Check if cityName is provided
     if (!query || query.trim() === "") {
         if(!lat||!lon) {
             return res.status(400).send("Please provide a valid city name or allow location access.");
         }
-        url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${units}`;
+        url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${units}`;
         capitalizedQuery = "your location";
     }  else {
-        url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&APPID=${apiKey}&units=${units}`;
+        url = `https://api.openweathermap.org/data/2.5/forecast?q=${query}&APPID=${apiKey}&units=${units}`;
     }
     
     // Check if the response code is not 200
@@ -160,7 +160,7 @@ app.post("/forecast", function(req, res) {
         // Register an event listener for the "data" event to accumulate the received data
         response.on("data", function(chunk) {
             data += chunk;
-            // console.log(data);
+            console.log(data);
         });
     
         // Register an event listener for the "end" event, which is triggered when all data is received
@@ -168,24 +168,33 @@ app.post("/forecast", function(req, res) {
             try {
                 
                 const weatherData = JSON.parse(data);
-    
-                const tempDescription = weatherData.weather[0].description;
-                const temperature = Math.floor(weatherData.main.temp);
-                const icon = weatherData.weather[0].icon;
-                const iconHttp = `http://openweathermap.org/img/wn/${icon}@2x.png`;
-                const feelsLike = Math.floor(weatherData.main.feels_like);
-                const humidity = weatherData.main.humidity;
 
-                var bg_color = getBodyClass(tempDescription);    
-                res.render('result.ejs', {
-                    iconHttp_: iconHttp,
-                    tempDescription_: tempDescription,
-                    temperature_: temperature,
-                    query_: capitalizedQuery,
-                    feelsLike_: feelsLike,
-                    humidity_: humidity,
-                    bg_color_: bg_color
-                });
+                const weatherList = weatherData.list;
+                const listLength = list.length;
+                
+                console.log(weatherList);
+                console.log(listLength);
+                console.log("Render Working")
+                res.send();
+                
+
+                // const tempDescription = weatherData.weather[0].description;
+                // const temperature = Math.floor(weatherData.main.temp);
+                // const icon = weatherData.weather[0].icon;
+                // const iconHttp = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+                // const feelsLike = Math.floor(weatherData.main.feels_like);
+                // const humidity = weatherData.main.humidity;
+                
+                // var bg_color = getBodyClass(tempDescription);    
+                // res.render('result.ejs', {
+                //     iconHttp_: iconHttp,
+                //     tempDescription_: tempDescription,
+                //     temperature_: temperature,
+                //     query_: capitalizedQuery,
+                //     feelsLike_: feelsLike,
+                //     humidity_: humidity,
+                //     bg_color_: bg_color
+                // });
             } catch (error) {
                 // Error while parsing the data or accessing properties
                 res.status(500).send("An error occurred while processing the weather data.");
