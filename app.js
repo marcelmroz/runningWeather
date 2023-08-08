@@ -160,23 +160,35 @@ app.post("/forecast", function(req, res) {
         // Register an event listener for the "data" event to accumulate the received data
         response.on("data", function(chunk) {
             data += chunk;
-            console.log(data);
+            // console.log(data);
         });
     
         // Register an event listener for the "end" event, which is triggered when all data is received
         response.on("end", function() {
             try {
-                
                 const weatherData = JSON.parse(data);
+                // console.log(weatherData);
 
-                const weatherList = weatherData.list;
-                const listLength = list.length;
+                for(let i=0;i<weatherData.list.length;i++){
+                    const temperature = weatherData.list[i].main.temp;
+                    const dateUnix = weatherData.list[i].dt;
+                    const date = new Date(dateUnix*1000).toLocaleDateString("en-US");
+
+
+                    console.log(`unix: ${dateUnix}`);
+                    console.log(temperature);
+                    console.log(date);
+                    console.log("------------");
+                }
+                console.log(`selected date by user: ${selectedDate}`);   
+                console.log(`selected time by user: ${timeOfRun}`);
+      
+
+            
+
                 
-                console.log(weatherList);
-                console.log(listLength);
-                console.log("Render Working")
-                res.send();
                 
+                res.render('forecast.ejs');
 
                 // const tempDescription = weatherData.weather[0].description;
                 // const temperature = Math.floor(weatherData.main.temp);
