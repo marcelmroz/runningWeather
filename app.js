@@ -134,10 +134,6 @@ app.post("/forecast", function(req, res) {
     var url = "";
     const timeOfRun = req.body.timeOfRun;
     const selectedDate = req.body.selectedDate;
-    // console.log(query);
-    // console.log(lat + " " + lon);
-    // console.log(timeOfRun);
-    // console.log(selectedDate);
 
     // Check if cityName is provided
     if (!query || query.trim() === "") {
@@ -149,6 +145,11 @@ app.post("/forecast", function(req, res) {
     }  else {
         url = `https://api.openweathermap.org/data/2.5/forecast?q=${query}&APPID=${apiKey}&units=${units}`;
     }
+    
+    if (!timeOfRun || !selectedDate) {
+        return res.status(400).send("Please provide both time and date.");
+    }
+
     
     // Check if the response code is not 200
     https.get(url, function(response) {
@@ -167,11 +168,6 @@ app.post("/forecast", function(req, res) {
         response.on("end", function() {
             try {
                 const weatherData = JSON.parse(data);
-                // console.log(weatherData);
-
-                console.log("================================");
-                console.log("=======++++++++++++=============");
-                console.log("================================");
 
                 // Parse the selected date
                 const parsedDate = new Date(selectedDate);
@@ -182,43 +178,63 @@ app.post("/forecast", function(req, res) {
                 const combinedDateTime = new Date(year, month - 1, day, hours, minutes);
                 const unixTimestamp = combinedDateTime.getTime() / 1000;
 
+                const forecasts = new Map();
+
                 //==================loop=====================
                 for(let i=0;i<weatherData.list.length;i++){
-                    const temperature = weatherData.list[i].main.temp;
                     const dateUnix = weatherData.list[i].dt;
                     const date = new Date(dateUnix*1000).toLocaleDateString("en-US");
-
-                    console.log("------------");
-                    console.log(`date unix: ${dateUnix}`);
-                    console.log("date normal: "+date);
-                    console.log(temperature);
-
-
-                    console.log(`selected datetime to unix: ${unixTimestamp}`);
+                    forecasts.set(i,dateUnix);
                 }
+                // console.log(`datetime provided by user to unix: ${unixTimestamp}`);
 
-      
+                let closestKey;
+                let closestDiff = Infinity;
 
+                forecasts.forEach((value, key) => {
+                const diff = Math.abs(value - unixTimestamp);
+                    if (diff < closestDiff) {
+                        closestDiff = diff;
+                        closestKey = key;
+                    }
+                });
+                // console.log(`Closest key to unixTimestamp: ${closestKey}`);
+
+                const currentForecast = weatherData.list[closestKey];
+
+
+                function formatUnixTimestamp(unixTimestamp) {
+                    const date = new Date(unixTimestamp * 1000);
+                  
+                    const day = date.getDate();
+                    const month = date.toLocaleString('en-GB', { month: 'long' });
+                    const hours = date.getHours();
+                    const minutes = date.getMinutes();
+                  
+                    return `On ${day} ${month} at ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+                  }
+                  
+                  const forecastDate = formatUnixTimestamp(unixTimestamp);
                 
-                res.render('forecast.ejs');
+                // console.log(forecastDate);
 
-                // const tempDescription = weatherData.weather[0].description;
-                // const temperature = Math.floor(weatherData.main.temp);
-                // const icon = weatherData.weather[0].icon;
-                // const iconHttp = `http://openweathermap.org/img/wn/${icon}@2x.png`;
-                // const feelsLike = Math.floor(weatherData.main.feels_like);
-                // const humidity = weatherData.main.humidity;
-                
-                // var bg_color = getBodyClass(tempDescription);    
-                // res.render('result.ejs', {
-                //     iconHttp_: iconHttp,
-                //     tempDescription_: tempDescription,
-                //     temperature_: temperature,
-                //     query_: capitalizedQuery,
-                //     feelsLike_: feelsLike,
-                //     humidity_: humidity,
-                //     bg_color_: bg_color
-                // });
+                const temperature = currentForecast.main.temp;
+                const description = currentForecast.weather[0].description;
+                let bg_color = getBodyClass(description);
+                const icon = currentForecast.weather[0].icon;
+                const iconHttp = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+
+                // console.log("Temperatura prognozy pogody: " + temperature);
+
+                res.render('forecast.ejs',{
+                    temperature: temperature,
+                    capitalizedQuery: capitalizedQuery,
+                    description: description,
+                    bg_color: bg_color,
+                    iconHttp: iconHttp,
+                    forecastDate: forecastDate
+                });
+
             } catch (error) {
                 // Error while parsing the data or accessing properties
                 res.status(500).send("An error occurred while processing the weather data.");
