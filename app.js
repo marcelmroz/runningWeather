@@ -169,24 +169,36 @@ app.post("/forecast", function(req, res) {
                 const weatherData = JSON.parse(data);
                 // console.log(weatherData);
 
+                console.log("================================");
+                console.log("=======++++++++++++=============");
+                console.log("================================");
+
+                // Parse the selected date
+                const parsedDate = new Date(selectedDate);
+                const day = parsedDate.getDate();
+                const month = parsedDate.getMonth() + 1;
+                const year = parsedDate.getFullYear();
+                const [hours, minutes] = timeOfRun.split(':');
+                const combinedDateTime = new Date(year, month - 1, day, hours, minutes);
+                const unixTimestamp = combinedDateTime.getTime() / 1000;
+
+                //==================loop=====================
                 for(let i=0;i<weatherData.list.length;i++){
                     const temperature = weatherData.list[i].main.temp;
                     const dateUnix = weatherData.list[i].dt;
                     const date = new Date(dateUnix*1000).toLocaleDateString("en-US");
 
-
-                    console.log(`unix: ${dateUnix}`);
-                    console.log(temperature);
-                    console.log(date);
                     console.log("------------");
+                    console.log(`date unix: ${dateUnix}`);
+                    console.log("date normal: "+date);
+                    console.log(temperature);
+
+
+                    console.log(`selected datetime to unix: ${unixTimestamp}`);
                 }
-                console.log(`selected date by user: ${selectedDate}`);   
-                console.log(`selected time by user: ${timeOfRun}`);
+
       
 
-            
-
-                
                 
                 res.render('forecast.ejs');
 
