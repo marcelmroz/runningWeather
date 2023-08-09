@@ -8,5 +8,15 @@ WebApp based on openweathermap API - Work in Progress
 ![Alt text](./github_images/forecast_page_date.png)
 ## Time picker
 ![Alt text](./github_images/forecast_page_time.png)
-## Example of use
-![Alt text](./github_images/weather_in_london.png)
+# Example of use
+## Current weather in Hong Kong
+![Alt text](./github_images/weathernow_city.png)
+## Current weather in your location
+![Alt text](./github_images/weathernow_location.png)
+## Forecast in Warsaw
+![Alt text](./github_images/forecast_city.png)
+## Forecast in your location
+![Alt text](./github_images/forecast_location.png)
+
+
+
