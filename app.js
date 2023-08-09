@@ -150,7 +150,7 @@ app.post("/forecast", function(req, res) {
         return res.status(400).send("Please provide both time and date.");
     }
 
-    
+
     // Check if the response code is not 200
     https.get(url, function(response) {
         if (response.statusCode !== 200) {
@@ -210,19 +210,22 @@ app.post("/forecast", function(req, res) {
                     const month = date.toLocaleString('en-GB', { month: 'long' });
                     const hours = date.getHours();
                     const minutes = date.getMinutes();
+                    var suffix = day % 10 === 1 && day !== 11 ? "st" :
+                        day % 10 === 2 && day !== 12 ? "nd" :
+                            day % 10 === 3 && day !== 13 ? "rd" : "th";
                   
-                    return `On ${day} ${month} at ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+                    return `On ${day}${suffix} of ${month} at ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
                   }
                   
                   const forecastDate = formatUnixTimestamp(unixTimestamp);
                 
-                // console.log(forecastDate);
-
-                const temperature = currentForecast.main.temp;
+                const temperature = Math.floor(currentForecast.main.temp);
                 const description = currentForecast.weather[0].description;
                 let bg_color = getBodyClass(description);
                 const icon = currentForecast.weather[0].icon;
                 const iconHttp = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+                const feelsLike = Math.floor(currentForecast.main.feels_like);
+                const humidity = currentForecast.main.humidity;
 
                 // console.log("Temperatura prognozy pogody: " + temperature);
 
@@ -232,7 +235,9 @@ app.post("/forecast", function(req, res) {
                     description: description,
                     bg_color: bg_color,
                     iconHttp: iconHttp,
-                    forecastDate: forecastDate
+                    forecastDate: forecastDate,
+                    feelsLike: feelsLike,
+                    humidity: humidity
                 });
 
             } catch (error) {

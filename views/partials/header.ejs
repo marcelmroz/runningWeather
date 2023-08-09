@@ -9,7 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
-  <nav class="navbar navbar-expand-sm navbar-light bg-transparent sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-light bg-transparent sticky-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">RunningWeatherApp</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
@@ -17,7 +17,12 @@
       </button>
       <div class="collapse navbar-collapse" id="mynavbar">
         <ul class="navbar-nav me-auto hidden">
-
+          <li class="nav-item">
+            <a class="nav-link " href="/">Now</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link hidden" href="/forecast">Forecast</a>
+          </li>
         </ul>
         <form class="d-flex">
           <button type="button" class="btn btn-outline-primary me-2">Login</button>
@@ -26,7 +31,6 @@
       </div>
     </div>
   </nav>
-
 
 
   <body>
