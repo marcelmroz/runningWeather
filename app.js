@@ -205,17 +205,34 @@ app.post("/forecast", function(req, res) {
 
                 function formatUnixTimestamp(unixTimestamp) {
                     const date = new Date(unixTimestamp * 1000);
-                  
-                    const day = date.getDate();
-                    const month = date.toLocaleString('en-GB', { month: 'long' });
-                    const hours = date.getHours();
-                    const minutes = date.getMinutes();
-                    var suffix = day % 10 === 1 && day !== 11 ? "st" :
-                        day % 10 === 2 && day !== 12 ? "nd" :
-                            day % 10 === 3 && day !== 13 ? "rd" : "th";
-                  
-                    return `On ${day}${suffix} of ${month} at ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
-                  }
+                    const now = new Date();
+                    
+                    const isToday = date.getDate() === now.getDate() && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+                    const isTomorrow = date.getDate() === now.getDate() + 1 && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+                    
+                    if (isToday) {
+                        const day = date.getDate();
+                        const hours = date.getHours();
+                        const minutes = date.getMinutes();
+                        return `Today at ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+                    } else if (isTomorrow) {
+                        const day = date.getDate();
+                        const hours = date.getHours();
+                        const minutes = date.getMinutes();
+                        return `Tomorrow at ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+                    } else {
+                        const day = date.getDate();
+                        const month = date.toLocaleString('en-GB', { month: 'long' });
+                        const hours = date.getHours();
+                        const minutes = date.getMinutes();
+                        const suffix = day % 10 === 1 && day !== 11 ? "st" :
+                                       day % 10 === 2 && day !== 12 ? "nd" :
+                                       day % 10 === 3 && day !== 13 ? "rd" : "th";
+                                  
+                        return `On ${day}${suffix} of ${month} at ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+                    }
+                }
+                
                   
                   const forecastDate = formatUnixTimestamp(unixTimestamp);
                 
