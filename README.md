@@ -19,6 +19,7 @@ WebApp based on openweathermap API - Work in Progress
 ![Alt text](./github_images/forecast_location.png)
 ## Forecast tomorrow
 ![Alt text](./github_images/forecast_tomorrow.png)
+### Used background photos from https://pixabay.com
 
 
 

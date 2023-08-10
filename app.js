@@ -12,25 +12,27 @@ const app = express();
 function getBodyClass(tempDescription) {
     switch (tempDescription) {
         case 'clear sky':
-            return 'lightblue';
+            return "url('../static/images/clear_sky.jpg')";
         case 'few clouds':
-            return 'powderblue';
+            return "url('../static/images/few_clouds.jpg')";
         case 'scattered clouds':
-            return 'lightslategray';
+            return "url('../static/images/scattered_clouds.jpg')";
         case 'overcast clouds':
-            return 'lightslategray';
+            return "url('../static/images/scattered_clouds.jpg')";
         case 'broken clouds':
-            return 'silver';
+            return "url('../static/images/broken_cloud.jpg')";
         case 'shower rain':
-            return 'lightslategrey';
+            return "url('../static/images/shower_rain.jpg')";
+        case 'moderate rain':
+            return "url('../static/images/shower_rain.jpg')";
         case 'rain':
-            return 'slategrey';
+            return "url('../static/images/rain.jpg')";
         case 'thunderstorm':
-            return 'gray';
+            return "url('../static/images/thunderstorm.jpg')";
         case 'snow':
-            return 'ghostwhite';
+            return "url('../static/images/snow.jpg')";
         case 'mist':
-            return 'gainsboro';
+            return "url('../static/images/mist.jpg')";
       default:
         return 'white';
     }
@@ -101,6 +103,8 @@ app.post("/submit", function(req, res) {
                 const humidity = weatherData.main.humidity;
 
                 var bg_color = getBodyClass(tempDescription);    
+                let bg_picture = getBodyClass(tempDescription);
+                // let bg_picture = "url('../static/images/mist.jpg')";
                 res.render('result.ejs', {
                     iconHttp_: iconHttp,
                     tempDescription_: tempDescription,
@@ -108,7 +112,8 @@ app.post("/submit", function(req, res) {
                     query_: capitalizedQuery,
                     feelsLike_: feelsLike,
                     humidity_: humidity,
-                    bg_color_: bg_color
+                    bg_color_: bg_color,
+                    bg_picture: bg_picture
                 });
             } catch (error) {
                 // Error while parsing the data or accessing properties
@@ -243,6 +248,8 @@ app.post("/forecast", function(req, res) {
                 const iconHttp = `http://openweathermap.org/img/wn/${icon}@2x.png`;
                 const feelsLike = Math.floor(currentForecast.main.feels_like);
                 const humidity = currentForecast.main.humidity;
+                let bg_picture = getBodyClass(description);
+
 
                 // console.log("Temperatura prognozy pogody: " + temperature);
 
@@ -254,7 +261,8 @@ app.post("/forecast", function(req, res) {
                     iconHttp: iconHttp,
                     forecastDate: forecastDate,
                     feelsLike: feelsLike,
-                    humidity: humidity
+                    humidity: humidity,
+                    bg_picture: bg_picture
                 });
 
             } catch (error) {
