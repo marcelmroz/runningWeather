@@ -58,12 +58,12 @@ app.post("/submit", function(req, res) {
     //Capitalize even if the city name contain more than one word
     const query = req.body.cityName;
     const words = query.split(/\s+|(?<=-)|(?=-)/); // Split on spaces and retain hyphens with positive lookbehind and lookahead
-    var capitalizedQuery = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    let capitalizedQuery = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     const apiKey = process.env.API_KEY;
     const units = "metric";
     const lat = req.body.latitude;
     const lon = req.body.longitude;
-    var url = "";
+    let url = "";
 
     // Check if cityName is provided
     if (!query || query.trim() === "") {
@@ -102,7 +102,6 @@ app.post("/submit", function(req, res) {
                 const feelsLike = Math.floor(weatherData.main.feels_like);
                 const humidity = weatherData.main.humidity;
 
-                var bg_color = getBodyClass(tempDescription);    
                 let bg_picture = getBodyClass(tempDescription);
                 // let bg_picture = "url('../static/images/mist.jpg')";
                 res.render('result.ejs', {
@@ -112,7 +111,6 @@ app.post("/submit", function(req, res) {
                     query_: capitalizedQuery,
                     feelsLike_: feelsLike,
                     humidity_: humidity,
-                    bg_color_: bg_color,
                     bg_picture: bg_picture
                 });
             } catch (error) {
@@ -124,19 +122,18 @@ app.post("/submit", function(req, res) {
         // Error while making the API request
         res.status(500).send("An error occurred while fetching weather data from the API.");
     });
-    
 });
 
 app.post("/forecast", function(req, res) {
     //Capitalize even if the city name contain more than one word
     const query = req.body.cityName;
     const words = query.split(/\s+|(?<=-)|(?=-)/); // Split on spaces and retain hyphens with positive lookbehind and lookahead
-    var capitalizedQuery = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    let capitalizedQuery = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     const apiKey = process.env.API_KEY;
     const units = "metric";
     const lat = req.body.latitude;
     const lon = req.body.longitude;
-    var url = "";
+    let url = "";
     const timeOfRun = req.body.timeOfRun;
     const selectedDate = req.body.selectedDate;
 
@@ -185,7 +182,6 @@ app.post("/forecast", function(req, res) {
 
                 const forecasts = new Map();
 
-                //==================loop=====================
                 for(let i=0;i<weatherData.list.length;i++){
                     const dateUnix = weatherData.list[i].dt;
                     const date = new Date(dateUnix*1000).toLocaleDateString("en-US");
@@ -237,27 +233,21 @@ app.post("/forecast", function(req, res) {
                         return `On ${day}${suffix} of ${month} at ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
                     }
                 }
-                
-                  
-                  const forecastDate = formatUnixTimestamp(unixTimestamp);
+            
+                const forecastDate = formatUnixTimestamp(unixTimestamp);
                 
                 const temperature = Math.floor(currentForecast.main.temp);
                 const description = currentForecast.weather[0].description;
-                let bg_color = getBodyClass(description);
                 const icon = currentForecast.weather[0].icon;
                 const iconHttp = `http://openweathermap.org/img/wn/${icon}@2x.png`;
                 const feelsLike = Math.floor(currentForecast.main.feels_like);
                 const humidity = currentForecast.main.humidity;
                 let bg_picture = getBodyClass(description);
 
-
-                // console.log("Temperatura prognozy pogody: " + temperature);
-
                 res.render('forecast.ejs',{
                     temperature: temperature,
                     capitalizedQuery: capitalizedQuery,
                     description: description,
-                    bg_color: bg_color,
                     iconHttp: iconHttp,
                     forecastDate: forecastDate,
                     feelsLike: feelsLike,
