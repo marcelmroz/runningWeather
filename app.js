@@ -23,6 +23,8 @@ function getBodyClass(tempDescription) {
             return "url('../static/images/broken_cloud.jpg')";
         case 'shower rain':
             return "url('../static/images/shower_rain.jpg')";
+        case 'light rain':
+            return "url('../static/images/shower_rain.jpg')";
         case 'moderate rain':
             return "url('../static/images/shower_rain.jpg')";
         case 'rain':
@@ -79,7 +81,13 @@ app.post("/submit", function(req, res) {
     // Check if the response code is not 200
     https.get(url, function(response) {
         if (response.statusCode !== 200) {
-            return res.status(404).send("City not found. Please enter a valid city name.");
+            if (response.statusCode === 404) {
+                return res.status(404).send("City not found. Please enter a valid city name.");
+            } else if (response.statusCode === 401) {
+                return res.status(401).send("Unauthorized. Please check your API key.");
+            } else {
+                return res.status(500).send("An error occurred while fetching weather data from the API.");
+            }
         }
     
         let data = "";    
@@ -151,12 +159,19 @@ app.post("/forecast", function(req, res) {
     if (!timeOfRun || !selectedDate) {
         return res.status(400).send("Please provide both time and date.");
     }
+    
 
 
     // Check if the response code is not 200
     https.get(url, function(response) {
         if (response.statusCode !== 200) {
-            return res.status(404).send("City not found. Please enter a valid city name.");
+            if (response.statusCode === 404) {
+                return res.status(404).send("City not found. Please enter a valid city name.");
+            } else if (response.statusCode === 401) {
+                return res.status(401).send("Unauthorized. Please check your API key.");
+            } else {
+                return res.status(500).send("An error occurred while fetching weather data from the API.");
+            }
         }
     
         let data = "";    
