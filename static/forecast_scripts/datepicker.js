@@ -1,4 +1,3 @@
 $(() => {
-  $(".clockpicker").clockpicker();
-
+  $('.clockpicker').clockpicker();
 });
