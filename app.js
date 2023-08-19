@@ -58,9 +58,8 @@ app.post('/login', function(req, res) {
 
 app.post('/submit', function(req, res) {
   // Capitalize even if the city name contain more than one word
-  const query = req.body.cityName;
-  // Split on spaces and retain hyphens with positive lookbehind and lookahead
-  const words = query.split(/\s+|(?<=-)|(?=-)/); 
+  const query = req.body.cityName; 
+  const words = query.split(/\s+|(?<=-)|(?=-)/); // Split on spaces and retain hyphens with positive lookbehind and lookahead
   let capitalizedQuery = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   const apiKey = process.env.API_KEY;
   const units = 'metric';
@@ -111,12 +110,12 @@ app.post('/submit', function(req, res) {
         const humidity = weatherData.main.humidity;
         const bgPicture = getBodyClass(tempDescription);
         res.render('result.ejs', {
-          iconHttp_: iconHttp,
-          tempDescription_: tempDescription,
-          temperature_: temperature,
-          query_: capitalizedQuery,
-          feelsLike_: feelsLike,
-          humidity_: humidity,
+          iconHttp: iconHttp,
+          tempDescription: tempDescription,
+          temperature: temperature,
+          query: capitalizedQuery,
+          feelsLike: feelsLike,
+          humidity: humidity,
           bgPicture: bgPicture,
         });
       } catch (error) {
@@ -157,7 +156,6 @@ app.post('/forecast', function(req, res) {
   if (!timeOfRun || !selectedDate) {
     return res.status(400).send('Please provide both time and date.');
   }
-
 
   // Check if the response code is not 200
   https.get(url, function(response) {
@@ -211,15 +209,12 @@ app.post('/forecast', function(req, res) {
             closestKey = key;
           }
         });
-        // console.log(`Closest key to unixTimestamp: ${closestKey}`);
 
         const currentForecast = weatherData.list[closestKey];
-
 
         function formatUnixTimestamp(unixTimestamp) {
           const date = new Date(unixTimestamp * 1000);
           const now = new Date();
-
           const isToday = date.getDate() === now.getDate() && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
           const isTomorrow = date.getDate() === now.getDate() + 1 && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
 
@@ -241,13 +236,11 @@ app.post('/forecast', function(req, res) {
             const suffix = day % 10 === 1 && day !== 11 ? 'st' :
                                        day % 10 === 2 && day !== 12 ? 'nd' :
                                        day % 10 === 3 && day !== 13 ? 'rd' : 'th';
-
             return `On ${day}${suffix} of ${month} at ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
           }
         }
 
         const forecastDate = formatUnixTimestamp(unixTimestamp);
-
         const temperature = Math.floor(currentForecast.main.temp);
         const description = currentForecast.weather[0].description;
         const icon = currentForecast.weather[0].icon;
