@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const {error} = require('console');
 
-// Used to secure API key
 require('dotenv').config();
 
 const app = express();
@@ -94,7 +93,6 @@ app.post('/submit', function(req, res) {
     // Register an event listener for the "data" event to accumulate the received data
     response.on('data', function(chunk) {
       data += chunk;
-      // console.log(data);
     });
 
     // Register an event listener for the "end" event, which is triggered when all data is received
@@ -142,7 +140,6 @@ app.post('/forecast', function(req, res) {
   const timeOfRun = req.body.timeOfRun;
   const selectedDate = req.body.selectedDate;
 
-  // Check if cityName is provided
   if (!query || query.trim() === '') {
     if (!lat||!lon) {
       return res.status(400).send('Please provide a valid city name or allow location access.');
@@ -173,7 +170,6 @@ app.post('/forecast', function(req, res) {
     // Register an event listener for the "data" event to accumulate the received data
     response.on('data', function(chunk) {
       data += chunk;
-      // console.log(data);
     });
 
     // Register an event listener for the "end" event, which is triggered when all data is received
@@ -194,11 +190,8 @@ app.post('/forecast', function(req, res) {
 
         for (let i=0; i<weatherData.list.length; i++) {
           const dateUnix = weatherData.list[i].dt;
-          //const date = new Date(dateUnix*1000).toLocaleDateString('en-US');
           forecasts.set(i, dateUnix);
         }
-        // console.log(`datetime provided by user to unix: ${unixTimestamp}`);
-
         let closestKey;
         let closestDiff = Infinity;
 
@@ -219,12 +212,10 @@ app.post('/forecast', function(req, res) {
           const isTomorrow = date.getDate() === now.getDate() + 1 && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
 
           if (isToday) {
-            //const day = date.getDate();
             const hours = date.getHours();
             const minutes = date.getMinutes();
             return `Today at ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
           } else if (isTomorrow) {
-            //const day = date.getDate();
             const hours = date.getHours();
             const minutes = date.getMinutes();
             return `Tomorrow at ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
